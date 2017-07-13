@@ -1,0 +1,65 @@
+<view class="m-view">
+	<view class="view-header">
+		<view class="header-section" wx:for="123" wx:key="users">
+			<view class="header_hd">
+				<!--<image src="../../images/star-large.png"  class="user_avatar">
+				-->
+				<view class="user_avatar_box ">
+					<view class="boxF">
+						<view class="boxS">
+							<view class="boxT avatar">
+								<view class="overlay">
+									 
+								</view>
+								
+							</view>
+						</view>
+						
+					</view>
+
+					
+					
+					<!--<view style="" class="avatar"></view>
+					<view class="user_ranking"></view>-->
+				</view>
+				<view class="ranking ranking_thir"></view>	
+				<!--</image>
+				-->
+			</view>
+			<view class="header_bd">
+				<view class="userInfo">
+					<view class="user">Money</view>
+					<view class="line"></view>
+					<view class="counts">12步</view>
+					<view wx:if="{{false}}">我今天走了XXX步，肯定不是倒数第一</view>
+				</view>
+			</view>
+		</view>
+	</view>
+	<!-- End .view-header -->
+	<view class="view-content">
+		<view class="content_logo">
+			<image src="../../images/logo.png"></image>
+		</view>
+		<view class="content_lists" wx:for="12345" wx:key="items">
+			<view class="lists_hd">{{index+1}}</view>
+			<view class="lists_bd">
+				<image></image>
+				<text>我是第4名</text>
+			</view>
+			<view class="lists_ft">120步</view>
+		</view>
+	</view>
+	<!-- End .view-content -->
+	<view class="view-footer">
+		<!-- 分享按钮 -->
+		<view class="share_bar">
+			<button type="primary" size="default" bindtap="defaultTap" open-type="share">{{share_title}}</button>
+		</view>
+		<!-- 广告位 -->
+		<view class="adds_bar" bindtap="previewImageTap" wx:if="{{adds}}">
+			<image mode="aspectFill" src="{{adds}}"></image>
+		</view>
+	</view>
+	<!-- End .view-footer -->
+</view>
