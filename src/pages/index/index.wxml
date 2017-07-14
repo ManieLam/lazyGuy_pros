@@ -1,43 +1,42 @@
 <view class="m-view">
 	<view class="view-header">
-		<view class="header-section" wx:for="123" wx:key="users">
+		<view class="header-section" wx:for="123" wx:key="users" wx:if="{{ isGroup }}">
 			<view class="header_hd">
-				<!--<image src="../../images/star-large.png"  class="user_avatar">
-				-->
-				<view class="user_avatar_box ">
-					<view class="boxF">
-						<view class="boxS">
-							<view class="boxT avatar">
-								<view class="overlay">
-									 
-								</view>
-								
-							</view>
+				<view class="boxF">
+					<view class="boxS">
+						<view class="boxT avatar" style="background-image:url({{}});background:#ccc;">
+							<view class="overlay"></view>
 						</view>
-						
 					</view>
-
-					
-					
-					<!--<view style="" class="avatar"></view>
-					<view class="user_ranking"></view>-->
 				</view>
-				<view class="ranking ranking_thir"></view>	
-				<!--</image>
-				-->
+				<view class="ranking ranking_thir"></view>
 			</view>
 			<view class="header_bd">
-				<view class="userInfo">
-					<view class="user">Money</view>
-					<view class="line"></view>
-					<view class="counts">12步</view>
-					<view wx:if="{{false}}">我今天走了XXX步，肯定不是倒数第一</view>
+				<view class="user">Money</view>
+				<view class="line"></view>
+				<view class="counts">12步</view>
+			</view>
+		</view>
+		<!-- 个人信息 -->
+		<view class="header-section__self" wx:if="{{ !isGroup }}">
+			<view class="header_hd">
+				<view class="boxF">
+					<view class="boxS">
+						<view class="boxT  avatar " style="background:url({{userData.avatar}})">
+							<view class="overlay"  ></view>
+						</view>
+					</view>
 				</view>
+			</view>
+			<view class="header_bd">
+				<view class="user">{{userData.nickname}}</view>
+				<view hidden="{{ isGroup }}">我今天走了{{selfStep||0}}步，肯定不是倒数第一</view>
 			</view>
 		</view>
 	</view>
 	<!-- End .view-header -->
-	<view class="view-content">
+	<!-- 排名列表 -->
+	<view class="view-content" hidden="{{ !isGroup }}">
 		<view class="content_logo">
 			<image src="../../images/logo.png"></image>
 		</view>
@@ -54,11 +53,11 @@
 	<view class="view-footer">
 		<!-- 分享按钮 -->
 		<view class="share_bar">
-			<button type="primary" size="default" bindtap="defaultTap" open-type="share">{{share_title}}</button>
+			<button type="primary" size="default" open-type="share">{{share_title}}</button>
 		</view>
-		<!-- 广告位 -->
-		<view class="adds_bar" bindtap="previewImageTap" wx:if="{{adds}}">
-			<image mode="aspectFill" src="{{adds}}"></image>
+		<!-- 广告位 wx:if="{{adds}}" {{adds}}||-->
+		<view class="adds_bar" bindtap="previewImageTap" >
+			<image mode="aspectFill" src="../../images/test.jpeg"></image>
 		</view>
 	</view>
 	<!-- End .view-footer -->

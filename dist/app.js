@@ -37,6 +37,7 @@ App({
         // deviceInfo: null,
         shareTicket: null,
         scene: 0,
+        code: null,
         // API_PATH: 'https://apple110.wpweixin.com'
     }
 })

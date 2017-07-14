@@ -1,4 +1,4 @@
-import { API_PATH } from 'config.js';
+import { API_HOST } from 'config.js';
 const Auth = require('auth.js');
 
 // 请求方式为GET
@@ -11,7 +11,7 @@ var apiRequest = function(url, data) {
     }, 1000)
     var promise = new Promise(function(resolve, reject) {
         wx.request({
-            url: API_PATH + url,
+            url: API_HOST + url,
             data: data,
             method: 'GET',
             header: { 'content-type': 'application/json' },
@@ -31,7 +31,7 @@ var apiRequest2 = function(url, data) {
     // }, 1000)
     var promise = new Promise(function(resolve, reject) {
         wx.request({
-            url: API_PATH + url,
+            url: API_HOST + url,
             data: data,
             method: 'GET',
             header: { 'content-type': 'application/json' },
@@ -46,28 +46,47 @@ var apiRequest2 = function(url, data) {
 var apiPost = function(url, data) {
     var promise = new Promise(function(resolve, reject) {
         wx.request({
-            url: API_PATH + url,
+            url: API_HOST + url,
             data: data,
             method: 'POST',
-            success: resolve,
+            success: res => {
+                wx.hideLoading();
+                resolve(res);
+            },
             fail: reject
         })
     });
     return promise;
 };
 
+//test
+// var apiTest = function(url, data) {
+//     var promise = new Promise(function(resolve, reject) {
+//         wx.request({
+//             url: "https://apple110.wpweixin.com/api/" + url,
+//             data: data,
+//             method: 'POST',
+//             success: resolve,
+//             fail: reject
+//         })
+//     });
+//     return promise;
+// };
+
 /**
  * 需要授权的接口调用
  * @param  {Function} fn
  * @return {Promise}
  */
-const guard = function(fn) {
+var guard = function(fn) {
     console.info(1111)
     const self = this
     return function() {
         if (Auth.check()) {
+            console.log(1);
             return fn.apply(self, arguments)
         } else {
+            console.log(2);
             return Auth.login()
                 .then(data => {
                     return fn.apply(self, arguments)
@@ -76,9 +95,12 @@ const guard = function(fn) {
     }
 }
 
-export default {
+
+
+module.exports = {
     apiRequest,
     apiRequest2,
     apiPost,
-    guard
+    // apiTest
+    // getRun: getRun,
 }

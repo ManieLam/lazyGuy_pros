@@ -1,4 +1,5 @@
 import { APP_ID, API_HOST } from "config.js"
+const App = getApp();
 
 const Data = {
     user: wx.getStorageSync('user'),
@@ -67,6 +68,9 @@ Auth.login = function login() {
         wx.login({
             success: function(res) {
                 const code = res.code
+                getApp().globalData.code = code;
+                // wx.setStorageSync('code', code)
+                console.log("loging:", getApp().globalData);
                 wx.getUserInfo({
                     success: function(res) {
                         const iv = res.iv
@@ -87,7 +91,7 @@ Auth.login = function login() {
                                     avatar: res.data.user.avatarurl
                                 }
                                 Data.token = res.data.access_token
-                                Data.expired_in = Date.now() + parseInt(res.data.expired_in, 10) - 60
+                                Data.expired_in = Date.now() + parseInt(res.data.expired_in, 10) * 1000 - 60 * 1000
                                 wx.setStorageSync('user', Data.user)
                                 wx.setStorageSync('token', Data.token)
                                 wx.setStorageSync('expired_in', Data.expired_in)
@@ -150,49 +154,20 @@ Auth.check = function check() {
     }
 }
 
-Auth.getPhoneList = function getPhoneList(shareTicket = null) {
-        return new Promise(function(resolve, reject) {
-            wx.login({
-                success: function(res) {
-                    const code = res.code
-                    wx.getUserInfo({
-                        success: function(res) {
-                            const iv = res.iv
-                            wx.request({
-                                url: API_HOST + 'group.phones.json',
-                                method: 'POST',
-                                data: {
-                                    code,
-                                    iv,
-                                    phone,
-                                    shareTicket: shareTicket
-                                },
-                                success: function(res) {
-                                    resolve(Data)
-                                },
-                                fail: function(res) {
-                                    reject(res)
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    },
-    /**
-     * 验证当前授权是否有效, 无效则重新登录
-     * @return {Promise} 用户
-     */
-    Auth.checkOrLogin = function checkOrLogin() {
-        if (Auth.check()) {
-            return Promise.resolve(Auth.user())
-        } else {
-            return Auth.login()
-                .then(data => {
-                    return data.user
-                })
-        }
+
+/**
+ * 验证当前授权是否有效, 无效则重新登录
+ * @return {Promise} 用户
+ */
+Auth.checkOrLogin = function checkOrLogin() {
+    if (Auth.check()) {
+        return Promise.resolve(Auth.user())
+    } else {
+        return Auth.login()
+            .then(data => {
+                return data.user
+            })
     }
+}
 
 module.exports = Auth

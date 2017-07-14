@@ -5,7 +5,12 @@
     color: $font_init_color;
 }
 
-.header-section {
+.view-footer {
+    padding-bottom: 30px;
+}
+
+.header-section,
+.header-section__self {
     display: flex;
     justify-content: space-around;
     align-self: center;
@@ -14,15 +19,15 @@
     width: 33.33%;
     box-sizing: border-box;
     padding-bottom: 18px;
-    .header_hd {
-        // display: flex;
-        // justify-content: space-around;
-        padding-top: 44px;
-        position: relative;
-    }
 }
 
-.user_avatar_box {
+.header-section__self {
+    width: 100%;
+}
+
+.header_hd {
+    padding-top: 44px;
+    position: relative;
     @include clearfix();
     .boxF,
     .boxS,
@@ -52,7 +57,8 @@
         visibility: visible;
     }
     .avatar {
-        background: url(test.jpeg);
+        // background: url(test.jpeg);
+        background-color: #ccc;
         background-size: 100% 100%;
     }
     .overlay {
@@ -61,7 +67,8 @@
     }
 }
 
-.header-section:nth-child(2n) {
+.header-section:nth-child(2n),
+.header-section__self {
     .header_hd {
         padding-top: 28px;
         padding-bottom: 8px;
@@ -111,11 +118,8 @@
 /*End 评奖*/
 
 .header_bd {
-    .userInfo {
-        line-height: 2;
-        text-align: center;
-        // max-width: 33.3%;
-    }
+    line-height: 2;
+    text-align: center;
     .user {
         font-weight: 600;
         box-sizing: border-box;
