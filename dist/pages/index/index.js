@@ -40,6 +40,7 @@ Page({
                 if (getApp().globalData.scene == 1044) {
                     this.getGroupRunList().then(res => {
                         console.log("data", res.lazy_men.length);
+                        // res.lazy_men = res.lazy_men.concat(res.lazy_men, res.lazy_men, res.lazy_men, res.lazy_men, res.lazy_men, res.lazy_men)
 
                         let stepData = (res.lazy_men.length >= 3) ? res.lazy_men.splice(0, 3) : res.lazy_men;
 
