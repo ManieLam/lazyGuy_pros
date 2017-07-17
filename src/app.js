@@ -1,5 +1,6 @@
 //app.js
 import Auth from "utils/auth"
+import API from "utils/api"
 
 App({
     onLaunch: function(options) {},
@@ -13,31 +14,18 @@ App({
 
     },
 
-    // getUserInfo: function(cb) {
-    //     var that = this
-    //     if (this.globalData.userInfo) {
-    //         typeof cb == "function" && cb(this.globalData.userInfo)
-    //     } else {
-    //         //调用登录接口
-    //         wx.login({
-    //             success: function() {
-    //                 wx.getUserInfo({
-    //                     success: function(res) {
-    //                         that.globalData.userInfo = res.userInfo
-    //                         typeof cb == "function" && cb(that.globalData.userInfo)
-    //                     }
-    //                 })
-    //             }
-    //         })
-    //     }
-    // },
+
 
     globalData: {
         userInfo: null,
-        // deviceInfo: null,
         shareTicket: null,
         scene: 0,
+        gid: 0,
         code: null,
-        // API_PATH: 'https://apple110.wpweixin.com'
+        INVALID_TOKEN: 'illegal_access_token',
+        shareTicket: '',
+        deviceInfo: null,
+        API_HOST: 'https://apple110.wpweixin.com',
+
     }
 })

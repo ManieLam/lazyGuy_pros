@@ -1,28 +1,30 @@
 <view class="m-view">
 	<view class="view-header">
-		<view class="header-section" wx:for="123" wx:key="users" wx:if="{{ isGroup }}">
+		<!-- -->
+		<view class="header-section" wx:for="{{stepData}}" wx:for-item="users" wx:key="users" wx:if="{{ isGroup }}">
 			<view class="header_hd">
 				<view class="boxF">
 					<view class="boxS">
-						<view class="boxT avatar" style="background-image:url({{}});background:#ccc;">
+						<view class="boxT avatar" style="background-image:url({{users.avatarurl}});background-size:100% 100%;">
 							<view class="overlay"></view>
 						</view>
 					</view>
 				</view>
-				<view class="ranking ranking_thir"></view>
+				<view class="ranking ranking_{{index}}"></view>
 			</view>
 			<view class="header_bd">
-				<view class="user">Money</view>
+				<view class="user">{{users.nickname ||'　'}}</view>
 				<view class="line"></view>
-				<view class="counts">12步</view>
+				<view class="counts">{{users.step? users.step +'步':'　'}}</view>
 			</view>
 		</view>
+
 		<!-- 个人信息 -->
 		<view class="header-section__self" wx:if="{{ !isGroup }}">
 			<view class="header_hd">
 				<view class="boxF">
 					<view class="boxS">
-						<view class="boxT  avatar " style="background:url({{userData.avatar}})">
+						<view class="boxT  avatar " style="background:url({{userData.avatarurl}})">
 							<view class="overlay"  ></view>
 						</view>
 					</view>
@@ -40,24 +42,24 @@
 		<view class="content_logo">
 			<image src="../../images/logo.png"></image>
 		</view>
-		<view class="content_lists" wx:for="12345" wx:key="items">
-			<view class="lists_hd">{{index+1}}</view>
+		<view class="content_lists" wx:for="{{stepList}}" wx:for-item="items" >
+			<view class="lists_hd">{{index+4}}</view>
 			<view class="lists_bd">
-				<image></image>
-				<text>我是第4名</text>
+				<image src="{{items.avatarurl}}"></image>
+				<text>{{items.nickname}}</text>
 			</view>
-			<view class="lists_ft">120步</view>
+			<view class="lists_ft">{{items.step}}步</view>
 		</view>
 	</view>
 	<!-- End .view-content -->
 	<view class="view-footer">
 		<!-- 分享按钮 -->
 		<view class="share_bar">
-			<button type="primary" size="default" open-type="share">{{share_title}}</button>
+			<button type="primary" size="default" open-type="share" hover-class="button-hover_act">{{share_title}}</button>
 		</view>
 		<!-- 广告位 wx:if="{{adds}}" {{adds}}||-->
-		<view class="adds_bar" bindtap="previewImageTap" >
-			<image mode="aspectFill" src="../../images/test.jpeg"></image>
+		<view class="adds_bar" bindtap="previewImageTap" wx:if="{{banner}}">
+			<image mode="aspectFill" src="{{banner}}"></image>
 		</view>
 	</view>
 	<!-- End .view-footer -->

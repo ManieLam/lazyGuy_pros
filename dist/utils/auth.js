@@ -1,24 +1,18 @@
-import { APP_ID, API_HOST } from "config.js"
-const App = getApp();
-
-const Data = {
-    user: wx.getStorageSync('user'),
-    token: wx.getStorageSync('token'),
-    expired_in: parseInt(wx.getStorageSync('expired_in'), 10)
-}
+import API from 'api';
 
 /*
 |-------------------------------------------------------------------------------
 | 基于token验证机制的微信小程序授权模块
 |-------------------------------------------------------------------------------
-| login()           - 登陆
-| logout()          - 注销
-| guest()           - 判断当前用户是否为游客
-| user()            - 获取当前用户信息
-| openid()          - 获取当前用户的openid
-| token()           - 获取本地token
-| check()           - 验证当前用户授权是否有效/过期
-| checkOrLogin()    - 验证当前授权是否有效, 无效则重新登录
+| login()			- 登陆
+| logout()			- 注销
+| check()			- 验证当前用户授权是否有效/过期
+| checkOrLogin()	- 验证当前授权是否有效, 无效则重新登录
+| guest()			- 判断当前用户是否为游客
+| user()			- 获取当前用户信息
+| openid()			- 获取当前用户的openid
+| token()			- 获取本地token
+| code()			- 获取code
 */
 const Auth = {}
 
@@ -26,7 +20,7 @@ const Auth = {}
  * 获取当前登陆用户的openid
  * @return {string}
  */
-Auth.openid = function openid() {
+Auth.openid = function() {
     const user = Auth.user()
     if (user && user.openid) {
         return user.openid
@@ -39,8 +33,8 @@ Auth.openid = function openid() {
  * 判断当前用户是否为游客
  * @return {boolean}
  */
-Auth.guest = function guest() {
-    if (!Data.user) {
+Auth.guest = function() {
+    if (!Auth.user()) {
         return true
     } else {
         return false
@@ -51,94 +45,115 @@ Auth.guest = function guest() {
  * 获取当前登陆用户信息
  * @return {object}
  */
-Auth.user = function user() {
-    if (Data.user) {
-        return Data.user
-    } else {
-        return null
-    }
-}
-
-/**
- * 登陆
- * @return {Promise} 用户
- */
-Auth.login = function login() {
-    return new Promise(function(resolve, reject) {
-        wx.login({
-            success: function(res) {
-                const code = res.code
-                getApp().globalData.code = code;
-                // wx.setStorageSync('code', code)
-                console.log("loging:", getApp().globalData);
-                wx.getUserInfo({
-                    success: function(res) {
-                        const iv = res.iv
-                        const encryptedData = res.encryptedData
-                        wx.request({
-                            url: API_HOST + 'auth.signon.json',
-                            method: 'POST',
-                            data: {
-                                code: code,
-                                iv: iv,
-                                encrypted_data: encryptedData
-                            },
-                            success: function(res) {
-                                Data.user = {
-                                    openid: res.data.user.openid,
-                                    nickname: res.data.user.nickname,
-                                    gender: res.data.user.gender,
-                                    avatar: res.data.user.avatarurl
-                                }
-                                Data.token = res.data.access_token
-                                Data.expired_in = Date.now() + parseInt(res.data.expired_in, 10) * 1000 - 60 * 1000
-                                wx.setStorageSync('user', Data.user)
-                                wx.setStorageSync('token', Data.token)
-                                wx.setStorageSync('expired_in', Data.expired_in)
-                                getApp().globalData.userInfo = Data.user
-                                console.log('登录成功')
-                                resolve(Data)
-                            },
-                            fail: function(res) {
-                                console.log('登录失败', res)
-                                reject(res)
-                            }
-                        })
-                    },
-                    fail: function(err) {
-                        console.log('用户信息获取失败', err)
-                        reject(err)
-                    }
-                })
-            }
-        })
-    })
-}
-
-/**
- * 注销
- * @return {boolean}
- */
-Auth.logout = function logout() {
-    wx.removeStorageSync('user')
-    wx.removeStorageSync('token')
-    wx.removeStorageSync('expired_in')
-    Data.user = null
-    Data.token = ''
-    Data.expired_in = 0
-
-    return true
+Auth.user = function() {
+    return wx.getStorageSync('user');
 }
 
 /**
  * 获取token
  * @return {string}
  */
-Auth.token = function token() {
-    if (Data.token) {
-        return Data.token
+Auth.token = function() {
+    return wx.getStorageSync('token');
+}
+
+/**
+ * 注销
+ * @return {boolean}
+ */
+Auth.logout = function() {
+    wx.removeStorageSync('user')
+    wx.removeStorageSync('token')
+    wx.removeStorageSync('expired_in')
+
+    return true
+}
+
+/**
+ * 登陆
+ * @return {Promise} 用户
+ */
+Auth.login = function(msg) {
+    return new Promise(function(resolve, reject) {
+        Auth.code().then(code => {
+            wx.getUserInfo({
+                withCredentials: true,
+                // lang: 'zh_CN',
+                success: function(res) {
+                    API.signon(code, res.iv, res.encryptedData).then(res => {
+                        getApp().globalData.userInfo = res;
+                        console.log('登录成功');
+                        resolve(res);
+                    }, err => {
+                        console.log('登录失败', err);
+                        reject(err);
+                    });
+                },
+                fail: function(err) {
+                    wx.showModal({
+                        title: '温馨提示',
+                        content: msg,
+                        success: function(res) {
+                            if (res.confirm) {
+                                wx.openSetting({
+                                    complete: function(res) {
+                                            reject(res);
+                                        }
+                                        // success: function(res){
+                                        // 	// if(res.authSetting["scope.userInfo"]){
+                                        // 	// 	Auth.login().then(res=>{
+                                        // 	// 		resolve(res);
+                                        // 	// 	}, err=>{
+                                        // 	// 		reject(err);
+                                        // 	// 	});
+                                        // 	// }else{
+                                        // 		reject(res);	// 这里一定要返回 reject ，不会会有同时两个 auth.signon 请求，但是模拟器上会有bug
+                                        // 	// }
+                                        // },
+
+                                    // fail: function(err) {
+                                    // 	reject(err);
+                                    // }
+                                });
+                            }
+                        },
+                        fail: function(err) {
+                            reject(err);
+                        }
+                    });
+                }
+            });
+        }, err => {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * 获取登录code
+ * @return code
+ */
+Auth.code = function() {
+    if (wx.getStorageSync('code') && Date.now() < wx.getStorageSync('code_expired_in')) {
+        console.log('local.code', wx.getStorageSync('code'));
+        return Promise.resolve(wx.getStorageSync('code'));
     } else {
-        return ''
+        return new Promise(function(resolve, reject) {
+            wx.login({
+                success: function(res) {
+
+                    wx.setStorageSync('code', res.code)
+                    wx.setStorageSync('code_expired_in', Date.now() + (300 - 30) * 1000)
+
+                    console.log('wx.login.code', res.code);
+                    resolve(res.code);
+                },
+
+                fail: function(err) {
+                    reject(err);
+                }
+            });
+        });
     }
 }
 
@@ -146,27 +161,30 @@ Auth.token = function token() {
  * 判断token还是否在有效期内
  * @return {boolean}
  */
-Auth.check = function check() {
-    if (Auth.user() && Date.now() < Data.expired_in && Data.token) {
-        return true
+Auth.check = function() {
+    if (Auth.user() && Date.now() < wx.getStorageSync('expired_in') && Auth.token) {
+        console.log('access_token过期时间：', (wx.getStorageSync('expired_in') - Date.now()) / 1000, '秒');
+        return true;
     } else {
-        return false
+        return false;
     }
 }
-
 
 /**
  * 验证当前授权是否有效, 无效则重新登录
  * @return {Promise} 用户
  */
-Auth.checkOrLogin = function checkOrLogin() {
+Auth.checkOrLogin = function(msg = '您必须授权才可以操作') {
     if (Auth.check()) {
-        return Promise.resolve(Auth.user())
+        return Promise.resolve(Auth.user());
     } else {
-        return Auth.login()
-            .then(data => {
-                return data.user
-            })
+        return new Promise(function(resolve, reject) {
+            Auth.login(msg).then(res => {
+                resolve(res.user);
+            }, err => {
+                reject(err);
+            });
+        });
     }
 }
 

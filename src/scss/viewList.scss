@@ -1,11 +1,13 @@
 .view-header {
     display: flex;
-    height: 212px;
+    height: 422rpx;
     background: $nav_color;
     color: $font_init_color;
+    padding: 0 5px;
 }
 
 .view-footer {
+    padding-top: 30px;
     padding-bottom: 30px;
 }
 
@@ -19,6 +21,7 @@
     width: 33.33%;
     box-sizing: border-box;
     padding-bottom: 18px;
+    overflow: hidden;
 }
 
 .header-section__self {
@@ -36,6 +39,7 @@
         width: 68px;
         height: 80px;
         overflow: hidden;
+        box-shadow: 0rpx 20rpx 20rpx #f87300;
     }
     .boxF,
     .boxS {
@@ -60,10 +64,15 @@
         // background: url(test.jpeg);
         background-color: #ccc;
         background-size: 100% 100%;
+        position: relative;
     }
     .overlay {
         background: url(star-large.png);
         background-size: 100% 100%;
+        // overflow: hidden;
+    }
+    .user {
+        max-width: 160px;
     }
 }
 
@@ -75,11 +84,18 @@
     }
     .boxF,
     .boxS,
-    .boxT,
-    .overlay {
+    .boxT {
         width: 78px;
         height: 90px;
         overflow: hidden;
+        box-shadow: 0rpx 20rpx 20rpx #f87300;
+    }
+    .overlay {
+        background: url(star-large.png);
+        background-size: 100% 100%;
+        width: 78px;
+        height: 90px;
+        // overflow: hidden;
     }
 }
 
@@ -96,19 +112,19 @@
     height: 40px;
 }
 
-.ranking_fir {
+.ranking_1 {
     background: url(fir.png);
     background-size: 100% 100%;
     bottom: -10px;
 }
 
-.ranking_sec {
+.ranking_0 {
     background: url(sec.png);
     background-size: 100% 100%;
     bottom: -16px;
 }
 
-.ranking_thir {
+.ranking_2 {
     background: url(thir.png);
     background-size: 100% 100%;
     bottom: -16px;
@@ -120,14 +136,20 @@
 .header_bd {
     line-height: 2;
     text-align: center;
+    overflow: hidden;
+    width: 100%;
     .user {
         font-weight: 600;
         box-sizing: border-box;
+        padding: 5px;
         @include text_ellips();
+    }
+    .counts {
+        font-size: .999em;
     }
     .line {
         height: 8rpx;
-        width: 10px;
+        width: 26rpx;
         background: $font_init_color;
         margin: 0 auto;
     }
@@ -137,7 +159,7 @@
 /*End .view-header*/
 
 .view-content {
-    padding: 0 15px 15px 20px;
+    padding: 0 15px 0 20px;
     color: $font_init_color;
     .content_logo {
         display: flex;
@@ -155,6 +177,9 @@
     justify-content: space-around;
     align-items: center;
     padding: 10px 0;
+    .lists_hd {
+        width: 40rpx;
+    }
     .lists_bd {
         font-weight: 500;
         flex-grow: 1;
@@ -189,4 +214,8 @@
         width: 100%;
         height: 100%;
     }
+}
+
+.button-hover_act {
+    background: #a05b05;
 }
