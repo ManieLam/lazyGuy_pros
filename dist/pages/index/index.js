@@ -12,7 +12,6 @@ Page({
         selfStep: {}, //个人步数
         stepData: [], //前3名
         stepList: [], //步数列表
-        adds: {}, //广告
     },
 
     onLoad: function(options) {
@@ -34,12 +33,12 @@ Page({
             isGroup: getApp().globalData.scene == 1044 ? true : false,
             selfStep: API.getStorageSync("selfStep"),
         });
-        console.log("onshow:gid::", getApp().globalData.gid);
+        // console.log("onshow:gid::", getApp().globalData.gid);
         Auth.checkOrLogin().then(user => {
             that.getRun().then(res => {
                 if (getApp().globalData.scene == 1044) {
                     this.getGroupRunList().then(res => {
-                        console.log("data", res.lazy_men.length);
+                        // console.log("data", res.lazy_men.length);
                         // res.lazy_men = res.lazy_men.concat(res.lazy_men, res.lazy_men, res.lazy_men, res.lazy_men, res.lazy_men, res.lazy_men)
 
                         let stepData = (res.lazy_men.length >= 3) ? res.lazy_men.splice(0, 3) : res.lazy_men;
@@ -67,7 +66,7 @@ Page({
                         })
                         App.globalData.gid = res.gid;
 
-                        console.log("stepList:::", that.data.stepList, that.data.stepData);
+                        // console.log("stepList:::", that.data.stepList, that.data.stepData);
                     }, err => {
                         console.log(err);
                     });
@@ -79,23 +78,19 @@ Page({
 
     getRun() {
         //获取运动数据
-        let getRunTime = parseInt(API.getStorageSync("runtime_expired_in"), 10);
+        let getRunTime = parseInt(wx.getStorageSync("runtime_expired_in"), 10);
         that.setData({ userData: Auth.user() });
-        // console.log("getrun:", getRunTime, "|||", Date.now());
+        console.log("getrun:", getRunTime, "|||", Date.now());
         return new Promise(function(resolve, reject) {
             if (getRunTime && Date.now() < getRunTime) {
-                console.log(1111);
                 that.setData({ selfStep: wx.getStorageSync("selfStep") });
-                resolve('123');
+                resolve();
             } else {
-                console.log(2222);
                 Auth.code().then(code => {
                     wx.getWeRunData({
                         success: function(res) {
-                            console.log("rundata::::", res);
+                            // console.log("rundata::::", res);
                             API.getRunData({ code, iv: res.iv, encrypted_data: res.encryptedData }).then(data => {
-                                console.log(data);
-
                                 let result = data.step_info.stepInfoList;
                                 that.setData({
                                     selfStep: result[result.length - 1].step,
@@ -120,15 +115,13 @@ Page({
 
     getGroupRunList() {
         //获取群信息
-        console.log(" App.globalData.gid:::", App.globalData.gid);
+        console.log(" App.globalData.gid:::", App.globalData.gid, "|||", getApp().globalData.gid);
         // console.log("getGroup:shareTicket::", App.globalData.shareTicket);
         if (getApp().globalData.gid) {
             return API.getGroupRunList({ gid: getApp().globalData.gid });
-            // return API.post('/api2/group.lazy.men.json', { gid: App.globalData.gid }).then(res => { resolve(res); }, err => { reject(err); })
 
         } else if (App.globalData.shareTicket) {
             return new Promise(function(resolve, reject) {
-                // console.log('shareTicket: ', getApp().globalData.shareTicket);
                 Auth.code().then(code => {
                     wx.getShareInfo({
                         shareTicket: getApp().globalData.shareTicket,
@@ -166,6 +159,7 @@ Page({
                 current: this.data.banner,
                 urls: [this.data.banner]
             })
+
         }
     },
     onReady: function() {

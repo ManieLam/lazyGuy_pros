@@ -5,7 +5,7 @@
 			<view class="header_hd">
 				<view class="boxF">
 					<view class="boxS">
-						<view class="boxT avatar" style="background-image:url({{users.avatarurl}});background-size:100% 100%;">
+						<view class="boxT avatar" style="background-image:url({{users.avatarurl}});">
 							<view class="overlay"></view>
 						</view>
 					</view>
@@ -57,7 +57,7 @@
 		<view class="share_bar">
 			<button type="primary" size="default" open-type="share" hover-class="button-hover_act">{{share_title}}</button>
 		</view>
-		<!-- 广告位 wx:if="{{adds}}" {{adds}}||-->
+		<!-- 广告位 -->
 		<view class="adds_bar" bindtap="previewImageTap" wx:if="{{banner}}">
 			<image mode="aspectFill" src="{{banner}}"></image>
 		</view>

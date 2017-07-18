@@ -142,6 +142,7 @@
     line-height: 2;
     text-align: center;
     overflow: hidden;
+    padding-top: 10px;
     width: 100%;
     .user {
         font-weight: 600;
@@ -151,6 +152,7 @@
     }
     .counts {
         font-size: .999em;
+        color: #3e3a39;
     }
     .line {
         height: 8rpx;
@@ -185,6 +187,7 @@
     padding: 10px 0;
     .lists_hd {
         width: 40rpx;
+        color: #3e3a39;
     }
     .lists_bd {
         font-weight: 500;
@@ -203,6 +206,10 @@
     .lists_ft {
         font-weight: 600;
     }
+}
+
+.content_lists:last-child {
+    padding-bottom: 0;
 }
 
 .share_bar {
