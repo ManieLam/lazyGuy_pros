@@ -1,66 +1,71 @@
+<import src="../template/scrollXList.wxml"  />
 <view class="m-view">
 	<view class="view-header">
-		<!-- -->
-		<view class="header-section" wx:for="{{stepData}}" wx:for-item="users" wx:key="users" wx:if="{{ isGroup }}">
-			<view class="header_hd">
-				<view class="boxF">
-					<view class="boxS">
-						<view class="boxT avatar" style="background-image:url({{users.avatarurl}});">
-							<view class="overlay"></view>
-						</view>
-					</view>
-				</view>
-				<view class="ranking ranking_{{index}}"></view>
-			</view>
-			<view class="header_bd">
-				<view class="user">{{users.nickname ||'　'}}</view>
-				<view class="line"></view>
-				<view class="counts">{{users.step? users.step +'步':'　'}}</view>
-			</view>
+		<!-- 头图 -->
+		<view class="header_hd">
+			<image src="" class="test"  />
 		</view>
-
-		<!-- 个人信息 -->
-		<view class="header-section__self" wx:if="{{ !isGroup }}">
-			<view class="header_hd">
-				<view class="boxF">
-					<view class="boxS">
-						<view class="boxT  avatar " style="background:url({{userData.avatarurl}})">
-							<view class="overlay"  ></view>
-						</view>
-					</view>
-				</view>
+		<!-- 商家资料 -->
+		<view class="header_float">
+			<view class="float_hd">
+				<image src="" class="test" mode="aspectFit"></image>
+				<text>美推通讯</text>
 			</view>
-			<view class="header_bd">
-				<view class="user">{{userData.nickname}}</view>
-				<view hidden="{{ isGroup }}">我今天走了{{selfStep||0}}步，肯定不是倒数第一</view>
+			<view class="float_ft">
+				<view class="list_bd ft_line">
+					<image src="../../images/location.png" mode="aspectFit"></image>
+					<text class="center">地址地址地址地址地址地址地址地址地址地址地址地址</text>
+				</view>
+				<view class="list_bd ft_line">
+					<image src="../../images/phone.png" mode="aspectFit"></image>
+					<text class="center">13325455685</text>
+				</view>
 			</view>
 		</view>
 	</view>
 	<!-- End .view-header -->
-	<!-- 排名列表 -->
-	<view class="view-content" hidden="{{ !isGroup }}">
-		<view class="content_logo">
-			<image src="../../images/logo.png"></image>
-		</view>
-		<view class="content_lists" wx:for="{{stepList}}" wx:for-item="items" >
-			<view class="lists_hd">{{index+4}}</view>
-			<view class="lists_bd">
-				<image src="{{items.avatarurl}}"></image>
-				<text>{{items.nickname}}</text>
+	<view class="view-content">
+		<!-- 服务范围 -->
+		<view class="con_section">
+			<view class="list_hd">
+				<view class="left">
+					<image src="../../images/list.png" mode="aspectFit"></image>
+				</view>
+				<view class="center">服务范围</view>
+				<view class="right icon icon-arrow_down"></view>
 			</view>
-			<view class="lists_ft">{{items.step}}步</view>
+			<view class="list_content">
+				<view class="list_bd" wx:for="1234">
+					<view class="left"></view>
+					<view class="center">手机销售</view>
+				</view>
+			</view>
+		</view>
+		<!-- 照片相册 -->
+		<view class="con_section">
+			<view class="list_hd">
+				<view class="left">
+					<image src="../../images/photos.png" mode="aspectFit"></image>
+				</view>
+				<view class="center">照片相册</view>
+			</view>
+			<view class="scroll-bar">
+				<!--<swiper class="swiper-box" duration="300">
+					<swiper-item>-->
+						<template is="scrollXList" data="{{ scrollData }}"  />
+					<!--</swiper-item>
+				</swiper>-->
+			</view>
 		</view>
 	</view>
 	<!-- End .view-content -->
 	<view class="view-footer">
-		<!-- 分享按钮 -->
-		<view class="share_bar">
-			<button type="primary" size="default" open-type="share" hover-class="button-hover_act">{{share_title}}</button>
-		</view>
-		<!-- 广告位 -->
-		<view class="adds_bar" bindtap="previewImageTap" wx:if="{{banner}}">
-			<image mode="aspectFill" src="{{banner}}"></image>
+		<!-- 广告位  wx:if="{{banner}}" -->
+		<view class="adds_bar" bindtap="previewImageTap">
+			<image mode="aspectFill" src="{{banner}}" class="test"></image>
 		</view>
 	</view>
 	<!-- End .view-footer -->
+	
 </view>
+

@@ -46,9 +46,26 @@
 $font_min: 10pt;
 $font_mid:14px;
 $font_lar:18pt;
-$font_desc_h:#595757;
-$font_desc:#c4c4c4;
+//颜色 变量
+$font_desc_h:#333333;
+$font_desc:#ccc;
 $font_init_color:#231815;
-$nav_color:#ff9900;
+$nav_color:#ff7800;
+$navline:#2f6ed5;
+$page_color:#f7f7f7;
 $base_color:#fff;
-$border-color:#ccc;
+$border-color:#ddd;
+$test_color:#999; //测试 -可删
+page {
+    // line-height: 1.6;
+    // background: $page_color;
+    font-family: -apple-system-font, "Helvetica Neue", sans-serif;
+}
+
+.col_b2 {
+    color: #b2b2b2;
+}
+
+.col_35 {
+    color: #353535;
+}
